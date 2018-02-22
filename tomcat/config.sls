@@ -100,3 +100,16 @@ limits_conf:
       - service: tomcat
 {% endif %}
 
+tomcat_logging_properties:
+  file.managed:
+    - name: {{ tomcat.conf_dir }}/logging.properties
+    - contents: |
+{%- for k, v in tomcat.logging.items() %}
+        {{ k }}={{ v }}
+{%- endfor %}
+    - require:
+      - pkg: tomcat
+    - require_in:
+      - service: tomcat
+    - watch_in:
+      - service: tomcat

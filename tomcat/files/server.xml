@@ -140,42 +140,42 @@
                resourceName="UserDatabase"/>
       </Realm>
 
-      {% if sites %}
-      {% for id, site in sites.iteritems() %}
-      {%- set host_name = site.name if site.name is defined else id %}
+{%- if sites %}
+{%-   for id, site in sites.iteritems() %}
+{%-     set host_name = site.name if site.name is defined else id %}
       <Host name="{{ host_name }}"
-          {%- for k, v in site.host_parameters.iteritems()  %}
+{%-     for k, v in site.host_parameters.iteritems()  %}
             {{ k }}="{{ v }}"
-          {%- endfor %}>
-            {%- if (site.path is defined and site.docBase is defined) %}
+{%-     endfor %}>
+{%-     if (site.path is defined and site.docBase is defined) %}
             <Context path="{{ site.path }}"
                      docBase="{{ site.docBase }}"
                      debug="{{ site.debug|default(0) }}"
                      reloadable="{{ site.reloadable|default(true) }}"
             />
-            {% endif %}
-            {%- if site.alias is defined %}
+{%-     endif %}
+{%-     if site.alias is defined %}
             <Alias>{{ site.alias }}</Alias>
-            {% endif %}
+{%-     endif %}
 
-            {%- if site.valves is defined %}
-	    {%- for valve in site.valves  %}
+{%-     if site.valves is defined %}
+{%-       for valve in site.valves  %}
               <Valve
-              {%- for k, v in valve.iteritems() %}
+{%-         for k, v in valve.iteritems() %}
                 {{ k }}="{{ v }}"
-              {%- endfor %} />
-	    {%- endfor %}
-            {% endif %}
+{%-         endfor %} />
+{%-       endfor %}
+{%-     endif %}
       </Host>
-      {% endfor %}
-      {% else %}
+{%-   endfor %}
+{%- else %}
         <!-- Setting a default site, as no sites were defined in the formula -->
         <Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log." suffix=".txt"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" />
         </Host>
-      {% endif %}
+{%- endif %}
     </Engine>
   </Service>
 </Server>
